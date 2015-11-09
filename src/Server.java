@@ -71,13 +71,20 @@ public class Server {
 					response = ois.readObject();
 					responseText = response.toString();
 					System.out.println("server receive "+ responseText);
-					
+					try{
+						LinkedListItr itr = (LinkedListItr) response;
+						String s = itr.current.element.word;
+						GameServer.wordList.remove(GameServer.wordList.find(s));
+					}catch (Exception e){
+					}
 					if(response.equals("client ready")){
 						GameServer.t1.start();
 						GameServer.gameStarted = true;
 						GameServer.inputField.setText("");
 						GameServer.inputField.setEnabled(true);
 						GameServer.inputField.requestFocus();
+					}else if(response.equals("addClientScore")){
+						GameServer.addClientScore();
 					}
 					
 				}

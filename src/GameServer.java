@@ -38,6 +38,8 @@ public class GameServer extends JFrame{
 	JPanel gamePanel, optionPanel, infoPanel;
 	static JLabel serverNameLabel;
 	static JLabel clientNameLabel;
+	static JLabel serverScoreLabel;
+	static JLabel clientScoreLabel;
 	JFrame popUpFrame;
 	static LinkedList wordList = new LinkedList();
 	LinkedList welcomeList = new LinkedList();
@@ -49,7 +51,8 @@ public class GameServer extends JFrame{
     static JButton startButton;
     static boolean gameStarted = false;
     static Thread t1;
-    int score = 0;
+    static int serverScore = 0;
+    static int clientScore = 0;
     boolean clientIsReady = false;
     
 	public GameServer(){
@@ -67,8 +70,12 @@ public class GameServer extends JFrame{
 		infoPanel = new JPanel();
 		infoPanel.setSize(new Dimension(1000,300));
 		infoPanel.setBackground(Color.GRAY);
-		infoPanel.add(serverNameLabel, BorderLayout.WEST);
+		infoPanel.add(serverNameLabel);
+		serverScoreLabel = new JLabel("Score: " + serverScore);
+		infoPanel.add(serverScoreLabel);
 		infoPanel.add(clientNameLabel);
+		clientScoreLabel = new JLabel("Score: " + clientScore);
+		infoPanel.add(clientScoreLabel);
 		
 	}
 	private void createGamePanel() {
@@ -159,7 +166,18 @@ public class GameServer extends JFrame{
 						playSound("src/correct.wav");
 						System.out.println("correct");
 						wordList.remove(itr1);
-						score = score + 1;
+						try {
+							Server.oos.writeObject(itr1);
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						try {
+							addServerScore();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						break;
 					}
 					itr1.advance();
@@ -174,6 +192,15 @@ public class GameServer extends JFrame{
 		optionPanel.add(inputField);
 	
 		
+	}
+	public static void addClientScore(){
+		clientScore = clientScore + 1;
+		clientScoreLabel.setText("Score: " + clientScore);
+	}
+	private void addServerScore() throws IOException{
+		serverScore = serverScore + 1;
+		serverScoreLabel.setText("Score: " + serverScore);
+		Server.oos.writeObject("addServerScore");
 	}
 
 	public void playSound(String s) {
@@ -194,7 +221,7 @@ public class GameServer extends JFrame{
 		popUpFrame.setResizable(false);
 		popUpFrame.setLocationRelativeTo(null);
 		popUpFrame.setLayout(new GridLayout(3, 1));
-		JLabel winLabel = new JLabel("Your score is " + score + "/" + color.length +".");
+		JLabel winLabel = new JLabel("Your score is " + serverScore + "/" + color.length +".");
 		popUpFrame.add(winLabel);
 		JButton closeButton = new JButton("OK");
 		closeButton.addActionListener(new ActionListener(){

@@ -38,7 +38,7 @@ public class HomeClient extends JFrame{
 	public HomeClient(){
 		super("Client");
 		startButton = new JButton("Start");
-		//startButton.setEnabled(false);
+		startButton.setEnabled(false);
 		startButton.addActionListener(new ActionListener(){
 
 			@Override

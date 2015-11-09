@@ -28,6 +28,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 
 public class GameClient extends JFrame{
@@ -36,6 +37,8 @@ public class GameClient extends JFrame{
 	JPanel gamePanel, optionPanel, infoPanel;
 	static JLabel serverNameLabel;
 	static JLabel clientNameLabel;
+	static JLabel serverScoreLabel;
+	static JLabel clientScoreLabel;
 	JFrame popUpFrame;
 	static LinkedList wordList = new LinkedList();
 	LinkedList welcomeList = new LinkedList();
@@ -47,7 +50,8 @@ public class GameClient extends JFrame{
     static JButton startButton;
     boolean gameStarted = false;
     Thread t1;
-    int score = 0;
+    static int serverScore = 0;
+    static int clientScore = 0;
     
 	public GameClient(){
 		super("Rainy Word V1.1");
@@ -65,7 +69,11 @@ public class GameClient extends JFrame{
 		infoPanel.setSize(new Dimension(1000,300));
 		infoPanel.setBackground(Color.GRAY);
 		infoPanel.add(serverNameLabel);
+		serverScoreLabel = new JLabel("Score: " + serverScore);
+		infoPanel.add(serverScoreLabel);
 		infoPanel.add(clientNameLabel);
+		clientScoreLabel = new JLabel("Score: " + clientScore);
+		infoPanel.add(clientScoreLabel);
 		
 	}
 	private void createGamePanel() {
@@ -162,7 +170,19 @@ public class GameClient extends JFrame{
 						playSound("src/correct.wav");
 						System.out.println("correct");
 						wordList.remove(itr1);
-						score = score + 1;
+						try {
+							Client.oos.writeObject(itr1);
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						
+						try {
+							addClientScore();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						break;
 					}
 					itr1.advance();
@@ -172,11 +192,22 @@ public class GameClient extends JFrame{
 				}
 				
 			}
+
+			
 			
 		});
 		optionPanel.add(inputField);
 	
 		
+	}
+	private void addClientScore() throws IOException {
+		clientScore = clientScore + 1;
+		clientScoreLabel.setText("Score: " + clientScore);
+		Client.oos.writeObject("addClientScore");
+	}
+	public static void addServerScore(){
+		serverScore = serverScore + 1;
+		serverScoreLabel.setText("Score: " + serverScore);
 	}
 
 	public void playSound(String s) {
@@ -197,7 +228,7 @@ public class GameClient extends JFrame{
 		popUpFrame.setResizable(false);
 		popUpFrame.setLocationRelativeTo(null);
 		popUpFrame.setLayout(new GridLayout(3, 1));
-		JLabel winLabel = new JLabel("Your score is " + score + "/" + color.length +".");
+		JLabel winLabel = new JLabel("Your score is " + clientScore + "/" + color.length +".");
 		popUpFrame.add(winLabel);
 		JButton closeButton = new JButton("OK");
 		closeButton.addActionListener(new ActionListener(){
@@ -292,7 +323,7 @@ public class GameClient extends JFrame{
 			s = "";
 		}
 		serverName = s;
-		serverNameLabel = new JLabel("Server Name: " + serverName);	
+		serverNameLabel = new JLabel("Server Name: " + serverName, SwingConstants.LEFT);	
 		serverNameLabel.setForeground(Color.WHITE);
 	}
 	
@@ -301,7 +332,7 @@ public class GameClient extends JFrame{
 			s = "";
 		}
 		clientName = s;
-		clientNameLabel = new JLabel("Client Name: " + clientName);
+		clientNameLabel = new JLabel("Client Name: " + clientName, SwingConstants.RIGHT);
 		clientNameLabel.setForeground(Color.WHITE);
 	}
 	

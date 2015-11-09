@@ -67,11 +67,11 @@ public class LinkedList implements Serializable
 	 *If x is not in the list, the iterator points to null.
 	 *
 	 */
-	public LinkedListItr find( Object x )
+	public LinkedListItr find( String s )
 	{
 		ListNode itr = header.next;
 
-		while( itr != null && !itr.element.equals( x ) )
+		while( itr != null && !itr.element.word.equals(s) )
 			itr = itr.next;
 
 		return new LinkedListItr( itr );

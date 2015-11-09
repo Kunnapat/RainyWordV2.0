@@ -66,12 +66,21 @@ public class Client {
 					LinkedList list = (LinkedList) response;
 					HomeClient.wordList = list;
 					HomeClient.startButton.setEnabled(true);
-				} catch (Exception e){
 					
+				}catch (Exception e){
 				}
+				try{
+					LinkedListItr itr = (LinkedListItr) response;
+					String s = itr.current.element.word;
+					GameClient.wordList.remove(GameClient.wordList.find(s));
+				}catch (Exception e){
+				}
+				
 				if(response.equals("server ready")){
 					GameClient.startButton.setEnabled(true);
 					GameClient.inputField.setText(serverName+" is ready. Are you ready?");
+				}else if(response.equals("addServerScore")){
+					GameClient.addServerScore();
 				}
 				
 			}
