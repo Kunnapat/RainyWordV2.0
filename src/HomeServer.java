@@ -20,10 +20,12 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.JTextField;
 
 import org.omg.CORBA.portable.OutputStream;
@@ -33,8 +35,15 @@ public class HomeServer extends JFrame{
 	static int windowWidth = 500;
 	static int windowHeight = 300;
     JButton startButton, gameSetting;
-    JPanel catPanel;
+    JPanel topPanel, catPanel, bottomPanel;
     JComboBox<String> catBox ;
+    JSlider speedSlider;
+    JCheckBox caseCheckbox;
+    
+    static int fallingSpeed = 2;
+    static boolean caseSensitivity = false;
+    
+    
     
     LinkedList wordList = new LinkedList();
     String[] color = {"red", "black", "white","grey","green","yellow","orange","purple","pink"};
@@ -44,6 +53,15 @@ public class HomeServer extends JFrame{
     String[] pp = {"public","static", "void","main","string","args","int","long","double","char","private","for","if","and","or","while","null","System","println","new","break","thread","runnable","action","parse"};
 	public HomeServer(){
 		super("Server");
+		createTopPanel();
+		createCatPanel();
+		createBottomPanel();
+		this.add(topPanel, BorderLayout.NORTH);
+		this.add(catPanel, BorderLayout.CENTER);
+		this.add(bottomPanel, BorderLayout.SOUTH);	
+	}
+	private void createTopPanel(){
+		topPanel = new JPanel();
 		startButton = new JButton("Start");
 		startButton.setFont(new Font("Menlo",Font.PLAIN,12));
 		startButton.addActionListener(new ActionListener(){
@@ -53,6 +71,15 @@ public class HomeServer extends JFrame{
 				try {
 					getWordList();
 					Server.oos.writeObject(wordList);
+					try{
+						caseSensitivity = caseCheckbox.isSelected();		
+					}catch(Exception e2){
+						
+					}
+					if(caseSensitivity){
+						Server.oos.writeObject("case sensitive");
+					}
+					
 					GameServer game = GameServer.createAndShowGUI(wordList);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -62,33 +89,43 @@ public class HomeServer extends JFrame{
 			}
 
 			private void getWordList() {
-				String s = (String) catBox.getSelectedItem();
+					String s = "Color";
+				try{
+					s = (String) catBox.getSelectedItem();
+				}catch (Exception e){
+					
+				}
+				try{
+					fallingSpeed = speedSlider.getValue();
+				}catch(Exception e){
+					
+				}
 				LinkedListItr itr1 = wordList.zeroth();
 				int temp = 5;
 				if(s.equals("Color")){
 					for(int i = 0; i < color.length; i++){
-						wordList.insert(new Word(temp*-200,color[i]), itr1);
+						wordList.insert(new Word(temp*-200,color[i],fallingSpeed), itr1);
 						temp++;
 					}
 				}else if(s.equals("Car")){
 					for(int i = 0; i < car.length; i++){
-						wordList.insert(new Word(temp*-200,car[i]), itr1);
+						wordList.insert(new Word(temp*-200,car[i],fallingSpeed), itr1);
 						temp++;
 					}
 				}else if(s.equals("Luxury")){
 					for(int i = 0; i < luxury.length; i++){
-						wordList.insert(new Word(temp*-200,luxury[i]), itr1);
+						wordList.insert(new Word(temp*-200,luxury[i],fallingSpeed), itr1);
 						temp++;
 					}
 					
 				}else if(s.equals("Country")){
 					for(int i = 0; i < country.length; i++){
-						wordList.insert(new Word(temp*-200,country[i]), itr1);
+						wordList.insert(new Word(temp*-200,country[i],fallingSpeed), itr1);
 						temp++;
 					}
 				}else if(s.equals("Programming Practice")){
 					for(int i = 0; i < pp.length; i++){
-						wordList.insert(new Word(temp*-200,pp[i]), itr1);
+						wordList.insert(new Word(temp*-200,pp[i],fallingSpeed), itr1);
 						temp++;
 					}
 				}
@@ -97,33 +134,106 @@ public class HomeServer extends JFrame{
 			}
 			
 		});
-		this.add(startButton,BorderLayout.NORTH);
-		gameSetting = new JButton("Setting");
-		gameSetting.setFont(new Font("Menlo",Font.PLAIN,12));
-		createCatPanel();
-		this.add(catPanel, BorderLayout.CENTER);
-		this.add(gameSetting, BorderLayout.SOUTH);
-		
+		topPanel.add(startButton);
 	}
 	
 
 	private void createCatPanel() {
 		catPanel = new JPanel();
 		catPanel.setBackground(Color.BLACK);
-		JLabel instructionLabel = new JLabel("Please choose word category.");
-		instructionLabel.setForeground(Color.WHITE);
-		instructionLabel.setFont(new Font("Menlo",Font.PLAIN,12));
-		catPanel.add(instructionLabel, BorderLayout.CENTER);
-		catBox = new JComboBox<String>();
-		catBox.setFont(new Font("Menlo",Font.PLAIN,12));
-		catBox.setBackground(Color.GRAY);
-		catBox.setForeground(Color.BLACK);
-		catBox.addItem("Color");
-		catBox.addItem("Car");
-		catBox.addItem("Luxury");
-		catBox.addItem("Country");
-		catBox.addItem("Programming Practice");
-		catPanel.add(catBox, BorderLayout.CENTER);
+		
+	}
+	private void createBottomPanel(){
+		bottomPanel = new JPanel();
+		gameSetting = new JButton("Setting");
+		gameSetting.setFont(new Font("Menlo",Font.PLAIN,12));
+		gameSetting.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				createAndShowSettingFrame();
+				
+			}
+
+			private void createAndShowSettingFrame() {
+				final JFrame settingFrame = new JFrame();
+		        settingFrame.setSize(400,230); // set the size of GUI
+		        settingFrame.getContentPane().setBackground(Color.BLACK);
+		        settingFrame.setLocationRelativeTo(null);
+		        settingFrame.setVisible(true);
+		        settingFrame.setResizable(false);
+		        
+		        
+		        JPanel mainPanel = new JPanel();
+		        JPanel finPanel = new JPanel();
+		        mainPanel.setBackground(Color.BLACK);
+		        finPanel.setBackground(Color.BLACK);
+		        
+		        
+		        JLabel instructionLabel = new JLabel("       Word category.");
+				instructionLabel.setForeground(Color.GREEN);
+				instructionLabel.setFont(new Font("Menlo",Font.PLAIN,12));
+				catBox = new JComboBox<String>();
+				catBox.setFont(new Font("Menlo",Font.PLAIN,12));
+				catBox.setBackground(Color.GRAY);
+				catBox.setForeground(Color.BLACK);
+				catBox.addItem("Color");
+				catBox.addItem("Car");
+				catBox.addItem("Luxury");
+				catBox.addItem("Country");
+				catBox.addItem("Programming");
+				catBox.setForeground(Color.GREEN);
+				catBox.setBackground(Color.GRAY);
+				catBox.setPreferredSize(new Dimension(100,50));
+				
+				
+				JLabel speedLabel = new JLabel("       Falling Speed");
+				speedLabel.setForeground(Color.GREEN);
+				speedLabel.setFont(new Font("Menlo",Font.PLAIN,12));
+				speedSlider = new JSlider(JSlider.HORIZONTAL,1,4,2);
+				speedSlider.setMajorTickSpacing(1);
+				speedSlider.setMinorTickSpacing(1);
+				speedSlider.setPreferredSize(new Dimension(100,50));
+				speedSlider.setPaintTicks(true);
+				speedSlider.setPaintLabels(true);
+				speedSlider.setFont(new Font("Menlo",Font.PLAIN,12));
+				speedSlider.setForeground(Color.GREEN);
+				
+				JLabel caseLabel = new JLabel("       Case Sensitivity");
+				caseLabel.setForeground(Color.GREEN);
+				caseLabel.setFont(new Font("Menlo",Font.PLAIN,12));
+				caseCheckbox = new JCheckBox();
+				
+				
+				
+				JButton doneButton = new JButton("Finish");
+				doneButton.setBackground(Color.GRAY);
+				doneButton.setForeground(Color.GREEN);
+				doneButton.setPreferredSize(new Dimension(80,30));
+				doneButton.addActionListener(new ActionListener(){
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						settingFrame.dispose();
+						
+					}
+					
+				});
+				
+				
+				mainPanel.add(instructionLabel);
+				mainPanel.add(catBox);
+				mainPanel.add(speedLabel);
+				mainPanel.add(speedSlider);
+				mainPanel.add(caseLabel);
+				mainPanel.add(caseCheckbox);
+				finPanel.add(doneButton);
+				settingFrame.add(mainPanel, BorderLayout.CENTER);
+				settingFrame.add(finPanel, BorderLayout.SOUTH);
+			}
+			
+		});
+		bottomPanel.add(gameSetting, BorderLayout.SOUTH);
 	}
 
 

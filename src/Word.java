@@ -9,7 +9,7 @@ public class Word extends JPanel {
 
     private int wordXLocation;
     private int wordYLocation;
-    private int fallSpeed = 1;
+    private int fallSpeed;
     Random rand = new Random();
     String word;
     boolean visible;
@@ -35,16 +35,18 @@ public class Word extends JPanel {
     }
 
 
-    public Word(int y,String s){
+    public Word(int y,String s, int f){
         generateRandomXLocation();
         wordYLocation = y;
         word = s;
+        fallSpeed = f;
         visible = true;
     }
-    public Word(int x,int y,String s){
+    public Word(int x,int y,String s, int f){
         wordXLocation = x;
         wordYLocation = y;
         word = s;
+        fallSpeed = f;
         visible = true;
     }
 

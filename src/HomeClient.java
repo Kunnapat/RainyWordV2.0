@@ -35,6 +35,14 @@ public class HomeClient extends JFrame{
 	JButton gameSetting;
     static ObjectInputStream ois;
     static LinkedList wordList = new LinkedList();
+    
+    
+    
+    static int fallSpeed;
+    static boolean caseSensitivity;
+    
+    
+    
 	public HomeClient(){
 		super("Client");
 		startButton = new JButton("Start");

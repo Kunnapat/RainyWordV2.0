@@ -39,11 +39,11 @@ public class GameClient extends JFrame{
 	static JLabel clientNameLabel;
 	static JLabel serverScoreLabel;
 	static JLabel clientScoreLabel;
+	static boolean caseSensitivity = false;
 	JFrame popUpFrame;
 	static LinkedList wordList = new LinkedList();
 	LinkedList welcomeList = new LinkedList();
     String[] color = {"red", "black", "white","grey","green","yellow","orange","purple","pink"};
-    String inputWord;
 	static String serverName;
 	static String clientName;
     static JTextField inputField;
@@ -87,11 +87,11 @@ public class GameClient extends JFrame{
 //			wordList.insert(new Word(temp*-200,color[i]), itr1);
 //			temp++;
 //		}
-		welcomeList.insert(new Word(170,-150,"-------------------"+serverName+" has started the game"+"-------------------"), itr2);
-		welcomeList.insert(new Word(170,170,"▒█▀▀█ ░█▀▀█ ▀█▀ ▒█▄░▒█ ▒█░░▒█ 　 ▒█░░▒█ ▒█▀▀▀█ ▒█▀▀█ ▒█▀▀▄"), itr2);
-		welcomeList.insert(new Word(170,190,"▒█▄▄▀ ▒█▄▄█ ▒█░ ▒█▒█▒█ ▒█▄▄▄█ 　 ▒█▒█▒█ ▒█░░▒█ ▒█▄▄▀ ▒█░▒█"), itr2);
-		welcomeList.insert(new Word(170,210,"▒█░▒█ ▒█░▒█ ▄█▄ ▒█░░▀█ ░░▒█░░ 　 ▒█▄▀▄█ ▒█▄▄▄█ ▒█░▒█ ▒█▄▄▀"), itr2);
-		welcomeList.insert(new Word(170,320,"---------------------------------------------------------"), itr2);
+		welcomeList.insert(new Word(170,-150,"-------------------"+serverName+" has started the game"+"-------------------",3), itr2);
+		welcomeList.insert(new Word(170,170,"▒█▀▀█ ░█▀▀█ ▀█▀ ▒█▄░▒█ ▒█░░▒█ 　 ▒█░░▒█ ▒█▀▀▀█ ▒█▀▀█ ▒█▀▀▄",3), itr2);
+		welcomeList.insert(new Word(170,190,"▒█▄▄▀ ▒█▄▄█ ▒█░ ▒█▒█▒█ ▒█▄▄▄█ 　 ▒█▒█▒█ ▒█░░▒█ ▒█▄▄▀ ▒█░▒█",3), itr2);
+		welcomeList.insert(new Word(170,210,"▒█░▒█ ▒█░▒█ ▄█▄ ▒█░░▀█ ░░▒█░░ 　 ▒█▄▀▄█ ▒█▄▄▄█ ▒█░▒█ ▒█▄▄▀",3), itr2);
+		welcomeList.insert(new Word(170,320,"---------------------------------------------------------",3), itr2);
 		
 		repaint();
 	}
@@ -160,12 +160,22 @@ public class GameClient extends JFrame{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				inputWord = inputField.getText().toLowerCase();
+				String inputWord = "";
+				if(caseSensitivity){
+					inputWord = inputField.getText();
+				}else{
+					inputWord = inputField.getText().toLowerCase();
+				}
 				inputField.setText("");
 				System.out.println(inputWord);
 				LinkedListItr itr1 = wordList.first();
 				while(!itr1.isPastEnd()){
-					String temp = itr1.current.element.word.toLowerCase();
+					String temp = "";
+					if(caseSensitivity){
+						temp = itr1.current.element.word;
+					}else{
+						temp = itr1.current.element.word.toLowerCase();
+					}
 					if(inputWord.equals(temp)){
 						playSound("src/correct.wav");
 						System.out.println("correct");

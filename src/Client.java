@@ -66,7 +66,6 @@ public class Client {
 					LinkedList list = (LinkedList) response;
 					HomeClient.wordList = list;
 					HomeClient.startButton.setEnabled(true);
-					
 				}catch (Exception e){
 				}
 				try{
@@ -81,6 +80,8 @@ public class Client {
 					GameClient.inputField.setText(serverName+" is ready. Are you ready?");
 				}else if(response.equals("addServerScore")){
 					GameClient.addServerScore();
+				}else if (response.equals("case sensitive")){
+					GameClient.caseSensitivity = true;
 				}
 				
 			}
