@@ -55,6 +55,18 @@ public class GameServer extends JFrame{
     static int serverScore = 0;
     static int clientScore = 0;
     boolean clientIsReady = false;
+    static int fallSpeed;
+    static Thread t2 = new Thread(new Runnable(){
+
+		@Override
+		public void run() {
+			while(true){
+				
+			}
+			
+		}
+    	
+    });
     
 	public GameServer(){
 		super("Rainy Word V1.1");
@@ -72,10 +84,10 @@ public class GameServer extends JFrame{
 		infoPanel.setSize(new Dimension(1000,300));
 		infoPanel.setBackground(Color.GRAY);
 		infoPanel.add(serverNameLabel);
-		serverScoreLabel = new JLabel("Score: " + serverScore);
+		serverScoreLabel = new JLabel("       Score: " + serverScore+"           ");
 		infoPanel.add(serverScoreLabel);
 		infoPanel.add(clientNameLabel);
-		clientScoreLabel = new JLabel("Score: " + clientScore);
+		clientScoreLabel = new JLabel("       Score: " + clientScore+"           ");
 		infoPanel.add(clientScoreLabel);
 		
 	}
@@ -90,11 +102,11 @@ public class GameServer extends JFrame{
 //			wordList.insert(new Word(temp*-200,color[i]), itr1);
 //			temp++;
 //		}
-		welcomeList.insert(new Word(170,-150,"-------------------"+clientName+" has started the game"+"-------------------",3), itr2);
-		welcomeList.insert(new Word(170,170,"▒█▀▀█ ░█▀▀█ ▀█▀ ▒█▄░▒█ ▒█░░▒█ 　 ▒█░░▒█ ▒█▀▀▀█ ▒█▀▀█ ▒█▀▀▄",3), itr2);
-		welcomeList.insert(new Word(170,190,"▒█▄▄▀ ▒█▄▄█ ▒█░ ▒█▒█▒█ ▒█▄▄▄█ 　 ▒█▒█▒█ ▒█░░▒█ ▒█▄▄▀ ▒█░▒█",3), itr2);
-		welcomeList.insert(new Word(170,210,"▒█░▒█ ▒█░▒█ ▄█▄ ▒█░░▀█ ░░▒█░░ 　 ▒█▄▀▄█ ▒█▄▄▄█ ▒█░▒█ ▒█▄▄▀",3), itr2);
-		welcomeList.insert(new Word(170,320,"---------------------------------------------------------",3), itr2);
+		welcomeList.insert(new Word(170,-150,"-------------------"+clientName+" has started the game"+"-------------------",fallSpeed), itr2);
+		welcomeList.insert(new Word(170,170,"▒█▀▀█ ░█▀▀█ ▀█▀ ▒█▄░▒█ ▒█░░▒█ 　 ▒█░░▒█ ▒█▀▀▀█ ▒█▀▀█ ▒█▀▀▄",fallSpeed), itr2);
+		welcomeList.insert(new Word(170,190,"▒█▄▄▀ ▒█▄▄█ ▒█░ ▒█▒█▒█ ▒█▄▄▄█ 　 ▒█▒█▒█ ▒█░░▒█ ▒█▄▄▀ ▒█░▒█",fallSpeed), itr2);
+		welcomeList.insert(new Word(170,210,"▒█░▒█ ▒█░▒█ ▄█▄ ▒█░░▀█ ░░▒█░░ 　 ▒█▄▀▄█ ▒█▄▄▄█ ▒█░▒█ ▒█▄▄▀",fallSpeed), itr2);
+		welcomeList.insert(new Word(170,320,"---------------------------------------------------------",fallSpeed), itr2);
 		
 		repaint();
 	}
@@ -178,7 +190,7 @@ public class GameServer extends JFrame{
 						System.out.println("correct");
 						wordList.remove(itr1);
 						try {
-							Client.oos.writeObject(itr1);
+							Server.oos.writeObject(itr1);
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -207,11 +219,11 @@ public class GameServer extends JFrame{
 	}
 	public static void addClientScore(){
 		clientScore = clientScore + 1;
-		clientScoreLabel.setText("Score: " + clientScore);
+		clientScoreLabel.setText("       Score: " + clientScore+"           ");
 	}
 	private void addServerScore() throws IOException{
 		serverScore = serverScore + 1;
-		serverScoreLabel.setText("Score: " + serverScore);
+		serverScoreLabel.setText("       Score: " + serverScore+"           ");
 		Server.oos.writeObject("addServerScore");
 	}
 
@@ -330,7 +342,7 @@ public class GameServer extends JFrame{
 			s = "";
 		}
 		serverName = s;
-		serverNameLabel = new JLabel("Server Name: " + serverName);	
+		serverNameLabel = new JLabel("Server Name: " + serverName+"           ");	
 		serverNameLabel.setForeground(Color.WHITE);
 	}
 	
@@ -339,7 +351,7 @@ public class GameServer extends JFrame{
 			s = "";
 		}
 		clientName = s;
-		clientNameLabel = new JLabel("Client Name: " + clientName);
+		clientNameLabel = new JLabel("Client Name: " + clientName+"           ");
 		clientNameLabel.setForeground(Color.WHITE);
 	}
 	

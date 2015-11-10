@@ -79,7 +79,8 @@ public class HomeServer extends JFrame{
 					if(caseSensitivity){
 						Server.oos.writeObject("case sensitive");
 					}
-					
+					GameServer.fallSpeed = fallingSpeed;
+					Server.oos.writeObject("Speed_"+fallingSpeed);
 					GameServer game = GameServer.createAndShowGUI(wordList);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
@@ -123,7 +124,7 @@ public class HomeServer extends JFrame{
 						wordList.insert(new Word(temp*-200,country[i],fallingSpeed), itr1);
 						temp++;
 					}
-				}else if(s.equals("Programming Practice")){
+				}else if(s.equals("Programming")){
 					for(int i = 0; i < pp.length; i++){
 						wordList.insert(new Word(temp*-200,pp[i],fallingSpeed), itr1);
 						temp++;

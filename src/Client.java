@@ -82,6 +82,9 @@ public class Client {
 					GameClient.addServerScore();
 				}else if (response.equals("case sensitive")){
 					GameClient.caseSensitivity = true;
+				}else if (responseText.startsWith("Speed_")){
+					int temp = Integer.parseInt(responseText.substring(6));
+					GameClient.fallSpeed = temp;
 				}
 				
 			}

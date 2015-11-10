@@ -52,6 +52,7 @@ public class GameClient extends JFrame{
     Thread t1;
     static int serverScore = 0;
     static int clientScore = 0;
+    static int fallSpeed;
     
 	public GameClient(){
 		super("Rainy Word V1.1");
@@ -69,10 +70,10 @@ public class GameClient extends JFrame{
 		infoPanel.setSize(new Dimension(1000,300));
 		infoPanel.setBackground(Color.GRAY);
 		infoPanel.add(serverNameLabel);
-		serverScoreLabel = new JLabel("Score: " + serverScore);
+		serverScoreLabel = new JLabel("       Score: " + serverScore+"           ");
 		infoPanel.add(serverScoreLabel);
 		infoPanel.add(clientNameLabel);
-		clientScoreLabel = new JLabel("Score: " + clientScore);
+		clientScoreLabel = new JLabel("       Score: " + clientScore+"           ");
 		infoPanel.add(clientScoreLabel);
 		
 	}
@@ -87,11 +88,11 @@ public class GameClient extends JFrame{
 //			wordList.insert(new Word(temp*-200,color[i]), itr1);
 //			temp++;
 //		}
-		welcomeList.insert(new Word(170,-150,"-------------------"+serverName+" has started the game"+"-------------------",3), itr2);
-		welcomeList.insert(new Word(170,170,"▒█▀▀█ ░█▀▀█ ▀█▀ ▒█▄░▒█ ▒█░░▒█ 　 ▒█░░▒█ ▒█▀▀▀█ ▒█▀▀█ ▒█▀▀▄",3), itr2);
-		welcomeList.insert(new Word(170,190,"▒█▄▄▀ ▒█▄▄█ ▒█░ ▒█▒█▒█ ▒█▄▄▄█ 　 ▒█▒█▒█ ▒█░░▒█ ▒█▄▄▀ ▒█░▒█",3), itr2);
-		welcomeList.insert(new Word(170,210,"▒█░▒█ ▒█░▒█ ▄█▄ ▒█░░▀█ ░░▒█░░ 　 ▒█▄▀▄█ ▒█▄▄▄█ ▒█░▒█ ▒█▄▄▀",3), itr2);
-		welcomeList.insert(new Word(170,320,"---------------------------------------------------------",3), itr2);
+		welcomeList.insert(new Word(170,-150,"-------------------"+serverName+" has started the game"+"-------------------",fallSpeed), itr2);
+		welcomeList.insert(new Word(170,170,"▒█▀▀█ ░█▀▀█ ▀█▀ ▒█▄░▒█ ▒█░░▒█ 　 ▒█░░▒█ ▒█▀▀▀█ ▒█▀▀█ ▒█▀▀▄",fallSpeed), itr2);
+		welcomeList.insert(new Word(170,190,"▒█▄▄▀ ▒█▄▄█ ▒█░ ▒█▒█▒█ ▒█▄▄▄█ 　 ▒█▒█▒█ ▒█░░▒█ ▒█▄▄▀ ▒█░▒█",fallSpeed), itr2);
+		welcomeList.insert(new Word(170,210,"▒█░▒█ ▒█░▒█ ▄█▄ ▒█░░▀█ ░░▒█░░ 　 ▒█▄▀▄█ ▒█▄▄▄█ ▒█░▒█ ▒█▄▄▀",fallSpeed), itr2);
+		welcomeList.insert(new Word(170,320,"---------------------------------------------------------",fallSpeed), itr2);
 		
 		repaint();
 	}
@@ -212,12 +213,12 @@ public class GameClient extends JFrame{
 	}
 	private void addClientScore() throws IOException {
 		clientScore = clientScore + 1;
-		clientScoreLabel.setText("Score: " + clientScore);
+		clientScoreLabel.setText("       Score: " + clientScore+"           ");
 		Client.oos.writeObject("addClientScore");
 	}
 	public static void addServerScore(){
 		serverScore = serverScore + 1;
-		serverScoreLabel.setText("Score: " + serverScore);
+		serverScoreLabel.setText("       Score: " + serverScore+"           ");
 	}
 
 	public void playSound(String s) {
@@ -333,7 +334,7 @@ public class GameClient extends JFrame{
 			s = "";
 		}
 		serverName = s;
-		serverNameLabel = new JLabel("Server Name: " + serverName, SwingConstants.LEFT);	
+		serverNameLabel = new JLabel("Server Name: " + serverName+"           ");	
 		serverNameLabel.setForeground(Color.WHITE);
 	}
 	
@@ -342,7 +343,7 @@ public class GameClient extends JFrame{
 			s = "";
 		}
 		clientName = s;
-		clientNameLabel = new JLabel("Client Name: " + clientName, SwingConstants.RIGHT);
+		clientNameLabel = new JLabel("Client Name: " + clientName+"           ");
 		clientNameLabel.setForeground(Color.WHITE);
 	}
 	
