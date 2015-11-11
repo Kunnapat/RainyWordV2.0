@@ -7,12 +7,13 @@ import java.util.Random;
 
 public class Word extends JPanel {
 
-    private int wordXLocation;
-    private int wordYLocation;
-    private int fallSpeed;
+    int wordXLocation;
+    int wordYLocation;
+    int fallSpeed;
     Random rand = new Random();
     String word;
     boolean visible;
+    Color c = Color.GREEN;
 
 
     public int getYLocation(){
@@ -28,7 +29,7 @@ public class Word extends JPanel {
     public void paint(Graphics g){
     	Graphics2D g2 = (Graphics2D) g;
 		g2.setFont(new Font("Menlo",Font.PLAIN,20)); 
-        g2.setColor(Color.GREEN);
+        g2.setColor(c);
         g2.drawString(word, wordXLocation, wordYLocation);
       
         
@@ -48,6 +49,14 @@ public class Word extends JPanel {
         word = s;
         fallSpeed = f;
         visible = true;
+    }
+    public Word(int x,int y,String s, int f, Color cc){
+        wordXLocation = x;
+        wordYLocation = y;
+        word = s;
+        fallSpeed = f;
+        visible = true;
+        c = cc;
     }
 
     public void update(){

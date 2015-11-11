@@ -43,6 +43,7 @@ public class GameClient extends JFrame{
 	JFrame popUpFrame;
 	static LinkedList wordList = new LinkedList();
 	LinkedList welcomeList = new LinkedList();
+	static LinkedList coloredList = new LinkedList();
     String[] color = {"red", "black", "white","grey","green","yellow","orange","purple","pink"};
 	static String serverName;
 	static String clientName;
@@ -53,6 +54,27 @@ public class GameClient extends JFrame{
     static int serverScore = 0;
     static int clientScore = 0;
     static int fallSpeed;
+    static Thread t2 = new Thread(new Runnable(){
+
+		@Override
+		public void run() {
+			while(true){
+				String s = inputField.getText().toLowerCase();
+				LinkedListItr itr = wordList.first();
+				while(!itr.isPastEnd()){
+					Word w = itr.current.element;
+					String temp = w.word.toLowerCase();
+					if(temp.startsWith(s)){
+						LinkedListItr itr1 = coloredList.zeroth();
+						coloredList.insert(new Word(w.wordXLocation,w.wordYLocation,s,w.fallSpeed, Color.RED), itr1);
+					}
+					itr.advance();
+				}
+			}
+			
+		}
+    	
+    });
     
 	public GameClient(){
 		super("Rainy Word V1.1");
@@ -135,6 +157,7 @@ public class GameClient extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				try {
 					Client.oos.writeObject("client ready");
+					t2.start();
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -292,6 +315,7 @@ public class GameClient extends JFrame{
 				g2.drawRect(0, 0, windowWidth, windowHeight);
 		        LinkedListItr itr1 = wordList.first();
 		        LinkedListItr itr2 = welcomeList.first();
+		        LinkedListItr itr3 = coloredList.first();
 		        while(!itr2.isPastEnd()){
 		        	itr2.current.element.paint(g2);
 		        	itr2.advance();
@@ -299,6 +323,11 @@ public class GameClient extends JFrame{
 		        while(!itr1.isPastEnd()){
 		        	itr1.current.element.paint(g2);
 		        	itr1.advance();
+		        }
+		        while(!itr3.isPastEnd()){
+		        	itr3.current.element.paint(g2);
+		        	coloredList.remove(itr3);
+		        	itr3.advance();
 		        }
 		        update();
 			}
@@ -310,6 +339,7 @@ public class GameClient extends JFrame{
 		public void update(){
 			LinkedListItr itr1 = wordList.first();
 			LinkedListItr itr2 = welcomeList.first();
+			LinkedListItr itr3 = coloredList.first();
 	        while(!itr1.isPastEnd()){
 	        	itr1.current.element.update();
 	        	if(itr1.current.element.getYLocation() > windowHeight){
@@ -324,6 +354,13 @@ public class GameClient extends JFrame{
 	        		wordList.remove(itr2);
 	        	}
 	        	itr2.advance();
+	        }
+	        while(!itr3.isPastEnd()){
+	        	itr3.current.element.update();
+	        	if(itr3.current.element.getYLocation() > windowHeight){
+	        		wordList.remove(itr3);
+	        	}
+	        	itr3.advance();
 	        }
 		}
 	}

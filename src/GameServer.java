@@ -43,6 +43,7 @@ public class GameServer extends JFrame{
 	static boolean caseSensitivity = false;
 	JFrame popUpFrame;
 	static LinkedList wordList = new LinkedList();
+	static LinkedList coloredList = new LinkedList();
 	LinkedList welcomeList = new LinkedList();
     String[] color = {"red", "black", "white","grey","green","yellow","orange","purple","pink"};
     String inputWord;
@@ -61,7 +62,17 @@ public class GameServer extends JFrame{
 		@Override
 		public void run() {
 			while(true){
-				
+				String s = inputField.getText().toLowerCase();
+				LinkedListItr itr = wordList.first();
+				while(!itr.isPastEnd()){
+					Word w = itr.current.element;
+					String temp = w.word.toLowerCase();
+					if(temp.startsWith(s)){
+						LinkedListItr itr1 = coloredList.zeroth();
+						coloredList.insert(new Word(w.wordXLocation,w.wordYLocation,s,w.fallSpeed, Color.RED), itr1);
+					}
+					itr.advance();
+				}
 			}
 			
 		}
@@ -298,6 +309,7 @@ public class GameServer extends JFrame{
 				g2.drawRect(0, 0, windowWidth, windowHeight);
 		        LinkedListItr itr1 = wordList.first();
 		        LinkedListItr itr2 = welcomeList.first();
+		        LinkedListItr itr3 = coloredList.first();
 		        while(!itr2.isPastEnd()){
 		        	itr2.current.element.paint(g2);
 		        	itr2.advance();
@@ -305,6 +317,12 @@ public class GameServer extends JFrame{
 		        while(!itr1.isPastEnd()){
 		        	itr1.current.element.paint(g2);
 		        	itr1.advance();
+		        }
+		        while(!itr3.isPastEnd()){
+		        	g2.setColor(Color.RED);
+		        	itr3.current.element.paint(g2);
+		        	coloredList.remove(itr3);
+		        	itr3.advance();
 		        }
 		        update();
 			}
@@ -318,6 +336,7 @@ public class GameServer extends JFrame{
 		public void update(){
 			LinkedListItr itr1 = wordList.first();
 			LinkedListItr itr2 = welcomeList.first();
+			LinkedListItr itr3 = coloredList.first();
 	        while(!itr1.isPastEnd()){
 	        	itr1.current.element.update();
 	        	if(itr1.current.element.getYLocation() > windowHeight){
@@ -332,6 +351,13 @@ public class GameServer extends JFrame{
 	        		wordList.remove(itr2);
 	        	}
 	        	itr2.advance();
+	        }
+	        while(!itr3.isPastEnd()){
+	        	itr3.current.element.update();
+	        	if(itr3.current.element.getYLocation() > windowHeight){
+	        		wordList.remove(itr3);
+	        	}
+	        	itr3.advance();
 	        }
 		}
 	}
