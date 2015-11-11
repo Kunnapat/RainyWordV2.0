@@ -78,8 +78,11 @@ public class Server {
 					}catch (Exception e){
 					}
 					if(response.equals("client ready")){
+						System.out.println("hereee");
 						GameServer.t1.start();
+						System.out.println("hereee2");
 						GameServer.t2.start();
+						System.out.println("hereee3");
 						GameServer.gameStarted = true;
 						GameServer.inputField.setText("");
 						GameServer.inputField.setEnabled(true);

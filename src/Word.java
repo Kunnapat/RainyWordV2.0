@@ -58,7 +58,9 @@ public class Word extends JPanel {
         visible = true;
         c = cc;
     }
-
+    public void changeColor(Color c){
+    	this.c = c;
+    }
     public void update(){
 
 

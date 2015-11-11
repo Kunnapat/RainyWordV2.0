@@ -85,9 +85,11 @@ public class Client {
 				}else if (responseText.startsWith("Speed_")){
 					int temp = Integer.parseInt(responseText.substring(6));
 					GameClient.fallSpeed = temp;
+					
 				}
 				
 			}
+
 	}
 	
 	public static void main(String[] args) throws Exception {

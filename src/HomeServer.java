@@ -191,7 +191,7 @@ public class HomeServer extends JFrame{
 				JLabel speedLabel = new JLabel("       Falling Speed");
 				speedLabel.setForeground(Color.GREEN);
 				speedLabel.setFont(new Font("Menlo",Font.PLAIN,12));
-				speedSlider = new JSlider(JSlider.HORIZONTAL,1,4,2);
+				speedSlider = new JSlider(JSlider.HORIZONTAL,2,4,2);
 				speedSlider.setMajorTickSpacing(1);
 				speedSlider.setMinorTickSpacing(1);
 				speedSlider.setPreferredSize(new Dimension(100,50));
